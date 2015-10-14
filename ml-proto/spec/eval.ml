@@ -117,7 +117,7 @@ let mem_size v at =
  * we currently only support i32, just test that.
  *)
 let mem_overflow x =
-  I64.gt_u x (Int64.of_int32 Int32.max_int)
+  I64.gt_u x (Int64.of_int32 Int32.minus_one)
 
 let callstack_exhaustion at =
   error at ("runtime: callstack exhausted")
@@ -290,12 +290,12 @@ and eval_hostop host mem_opt hostop vs at =
   match hostop, vs with
   | PageSize, [] ->
     let mem = some mem_opt at in
-    assert (I64.lt_u host.page_size (Int64.of_int32 Int32.max_int));
+    assert (I64.lt_u host.page_size (Int64.of_int32 Int32.minus_one));
     Some (Int32 (Int64.to_int32 host.page_size))
 
   | MemorySize, [] ->
     let mem = some mem_opt at in
-    assert (I64.lt_u (Memory.size mem) (Int64.of_int32 Int32.max_int));
+    assert (I64.lt_u (Memory.size mem) (Int64.of_int32 Int32.minus_one));
     Some (Int32 (Int64.to_int32 (Memory.size mem)))
 
   | GrowMemory, [v] ->
