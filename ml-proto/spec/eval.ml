@@ -319,8 +319,8 @@ and eval_hostop host mem_opt hostop vs at =
 
 (* Modules *)
 
-let init_memory {it = {initial; segments; _}} =
-  let mem = Memory.create initial in
+let init_memory host {it = {initial; segments; _}} =
+  let mem = Memory.create host.page_size initial in
   Memory.init mem (List.map it segments);
   mem
 
@@ -335,7 +335,7 @@ let init m imports host =
   {module_ = m;
    imports;
    exports = List.fold_right (add_export funcs) exports ExportMap.empty;
-   memory = Lib.Option.map init_memory memory;
+   memory = Lib.Option.map (init_memory host) memory;
    host}
 
 let invoke instance name vs =
