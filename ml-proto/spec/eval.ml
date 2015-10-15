@@ -320,7 +320,11 @@ and eval_hostop host mem_opt hostop vs at =
 (* Modules *)
 
 let init_memory host {it = {initial; segments; _}} =
-  let mem = Memory.create host.page_size initial in
+  (* Round the initial memory size up to the nearest page size. *)
+  let roundup = Int64.logand (Int64.add initial (Int64.sub host.page_size 1L))
+                             (Int64.sub 0L host.page_size) in
+  if I64.lt_u roundup initial then raise Memory.SizeOverflow;
+  let mem = Memory.create roundup in
   Memory.init mem (List.map it segments);
   mem
 

@@ -54,12 +54,8 @@ let create' n =
   Array1.fill mem 0;
   mem
 
-let create page_size n =
-  (* Round the initial memory size up to the nearest page size. *)
-  let roundup = Int64.logand (Int64.add n (Int64.sub page_size 1L))
-                             (Int64.sub 0L page_size) in
-  if I64.lt_u roundup n then raise SizeOverflow;
-  ref (create' roundup)
+let create n =
+  ref (create' n)
 
 let init_seg mem seg =
   (* There currently is no way to blit from a string. *)

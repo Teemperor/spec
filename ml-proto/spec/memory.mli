@@ -17,7 +17,7 @@ exception Type
 exception Bounds
 exception SizeOverflow
 
-val create : size -> size -> memory
+val create : size -> memory
 val init : memory -> segment list -> unit
 val size : memory -> size
 val grow : memory -> size -> unit
