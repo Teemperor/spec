@@ -289,7 +289,6 @@ and coerce et vo =
 and eval_hostop host mem_opt hostop vs at =
   match hostop, vs with
   | PageSize, [] ->
-    let mem = some mem_opt at in
     assert (I64.lt_u host.page_size (I64_convert.extend_u_i32 (-1l)));
     Some (Int32 (Int64.to_int32 host.page_size))
 
