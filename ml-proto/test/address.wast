@@ -20,6 +20,11 @@
     )
     (export "good" $good)
 
+    (func $bad0
+        (call_import $print
+            (i32.load offset=25 align=1 (i32.sub (memory_size) (i32.const 28)))))
+    (export "bad0" $bad0)
+
     (func $bad1 (param $i i32) (i32.load offset=4294967296 (get_local $i)))
     (export "bad1" $bad1)
     (func $bad2 (param $i i32) (i32.load offset=4294967295 (get_local $i)))
@@ -28,7 +33,7 @@
 
 (assert_return (invoke "good" (i32.const 0)))
 (assert_return (invoke "good" (i32.const 995)))
-(assert_trap (invoke "good" (i32.const 996)) "runtime: out of bounds memory access")
+(assert_trap (invoke "bad0") "runtime: out of bounds memory access")
 (assert_trap (invoke "bad1" (i32.const 0)) "runtime: out of bounds memory access")
 (assert_trap (invoke "bad1" (i32.const 1)) "runtime: out of bounds memory access")
 (assert_trap (invoke "bad2" (i32.const 0)) "runtime: out of bounds memory access")
